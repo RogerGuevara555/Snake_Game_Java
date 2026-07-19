@@ -21,7 +21,7 @@ class Map {
         this.CEIL = setCeil();
     }
 
-    private char[][] setMap() {
+    private char[][] setMap () {
         char[][] map = new char[this.Y][this.X];
         for (char[] row : map){
             Arrays.fill(row, ' ');
@@ -47,6 +47,13 @@ class Map {
             System.out.println(this.WALL);
         }
         System.out.println(this.CEIL);
+    }
+
+    public void displaySnake () {
+        map[Y/2][X/2]     = 'O';
+        map[Y/2][X/2 - 1] = 'o';
+        map[Y/2][X/2 - 2] = 'o';
+        map[Y/2][X/2 - 3] = 'o';
     }
 
 }
