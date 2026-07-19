@@ -15,14 +15,18 @@ class Map {
 
     final int X;
     final int Y;
-    private char[][] map;
+    private MapSlot[][] map;
 
     private ArrayList<int[]> snakeCoords = new ArrayList<>(
         List.of(    //X,Y
+            new int[]{-2,0},
+            new int[]{-1,0},
             new int[]{0,0},
             new int[]{0,1},
             new int[]{0,2},
-            new int[]{1,2}
+            new int[]{0,3},
+            new int[]{1,3},
+            new int[]{2,3}
         )
     );
     
@@ -34,10 +38,12 @@ class Map {
         this.CEIL = configCeil();
     }
 
-    private char[][] configMap () {
-        char[][] map = new char[this.Y][this.X];
-        for (char[] row : map){
-            Arrays.fill(row, ' ');
+    private MapSlot[][] configMap () {
+        MapSlot[][] map = new MapSlot[this.Y][this.X];
+        for (int i = 0; i < this.Y; i++) {
+            for (int j = 0; j < this.X; j++) {
+                map[i][j] = new MapSlot();
+            }
         }
         return map;
     }
@@ -55,9 +61,9 @@ class Map {
     public void displayMap ()
     {
         System.out.println(this.CEIL);
-        for (char[] row : this.map) {
+        for (MapSlot[] row : this.map) {
             System.out.print(this.WALL);
-            for (char element : row) {System.err.print(element);}
+            for (MapSlot element : row) {System.out.print(element);}
             System.out.println(this.WALL);
         }
         System.out.println(this.CEIL);
@@ -66,13 +72,9 @@ class Map {
     public void displaySnake () {
         centerSnakeCoord();
         for (int[] coord : snakeCoords){
-            
+            getMapSlot(coord).setIcon(SNAKE_BODY);
         }
-
-        map[Y/2][X/2]     = SNAKE_HEAD;
-        map[Y/2][X/2 - 1] = SNAKE_BODY;
-        map[Y/2][X/2 - 2] = SNAKE_BODY;
-        map[Y/2][X/2 - 3] = SNAKE_BODY;
+        getMapSlot(snakeCoords.get(0)).setIcon(SNAKE_HEAD);
     }
 
     private void centerSnakeCoord () {
@@ -82,7 +84,7 @@ class Map {
         }
     }
 
-    private char getFromCoord (int[] coord) {
+    private MapSlot getMapSlot (int[] coord) {
         int coord_X = coord[0]; 
         int coord_Y = coord[1];
         return map[coord_Y][coord_X];
@@ -94,10 +96,6 @@ class Map {
 class MapSlot {
     private char icon = ' ';
 
-    public void setItem (char icon) {
-        this.icon = icon;
-    }
-    public String toString () {
-        return String.valueOf(icon);
-    }
+    public void setIcon (char icon) {this.icon = icon;}
+    public String toString () {return String.valueOf(icon);}
 }
