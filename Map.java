@@ -6,6 +6,8 @@ class Map {
     final char CEIL_ICON = '=';
     final char WALL = '|';
     final char CORNER = ':';
+    final char SNAKE_HEAD = 'O';
+    final char SNAKE_BODY = 'o';
 
     final char[] CEIL;
 
@@ -50,10 +52,10 @@ class Map {
     }
 
     public void displaySnake () {
-        map[Y/2][X/2]     = 'O';
-        map[Y/2][X/2 - 1] = 'o';
-        map[Y/2][X/2 - 2] = 'o';
-        map[Y/2][X/2 - 3] = 'o';
+        map[Y/2][X/2]     = SNAKE_HEAD;
+        map[Y/2][X/2 - 1] = SNAKE_BODY;
+        map[Y/2][X/2 - 2] = SNAKE_BODY;
+        map[Y/2][X/2 - 3] = SNAKE_BODY;
     }
 
 }
