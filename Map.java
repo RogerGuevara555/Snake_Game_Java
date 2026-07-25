@@ -34,11 +34,11 @@ class Map {
     public Map (int X, int Y) {
         this.X = X;
         this.Y = Y;
-        this.map = configMap();
-        this.CEIL = configCeil();
+        this.map = createMapSlotMatrix();
+        this.CEIL = createCeilCharArray();
     }
 
-    private MapSlot[][] configMap () {
+    private MapSlot[][] createMapSlotMatrix () {
         MapSlot[][] map = new MapSlot[this.Y][this.X];
         for (int i = 0; i < this.Y; i++) {
             for (int j = 0; j < this.X; j++) {
@@ -47,26 +47,38 @@ class Map {
         }
         return map;
     }
-    private char[] configCeil () {
+    private char[] createCeilCharArray () {
         final int CORNER_NUM = 2;
-        char[] ceil = new char[this.X+CORNER_NUM];
+        final int LINE_JUMP = 1;
+        char[] ceil = new char[this.X+CORNER_NUM+LINE_JUMP];
 
         Arrays.fill(ceil, this.CEIL_ICON);
         ceil[0] = this.CORNER;
-        ceil[ceil.length-1] = this.CORNER;
+        ceil[ceil.length-2] = this.CORNER;
+        ceil[ceil.length-1] = '\n';
 
         return ceil;
     }
 
-    public void displayMap ()
-    {
-        System.out.println(this.CEIL);
+    public void displayMap () {
+        String ceil = String.valueOf(this.CEIL);
+        StringBuilder mapBuilder = new StringBuilder(
+            "%s".formatted(this.WALL)
+        );
+        StringBuilder wallBuilder = new StringBuilder(
+            "%s\n%s".formatted(this.WALL, this.WALL)
+        );
+        
         for (MapSlot[] row : this.map) {
-            System.out.print(this.WALL);
-            for (MapSlot element : row) {System.out.print(element);}
-            System.out.println(this.WALL);
+            for (MapSlot element : row) {
+                mapBuilder.append(element);
+            }
+            mapBuilder.append(wallBuilder.toString());
         }
-        System.out.println(this.CEIL);
+        mapBuilder.insert(0, ceil);
+        mapBuilder.replace(mapBuilder.length()-1, mapBuilder.length(), ceil);  // '|' -> ceil
+        
+        System.out.println(mapBuilder.toString());
     }
 
     public void displaySnake () {
@@ -96,6 +108,10 @@ class Map {
 class MapSlot {
     private char icon = ' ';
 
-    public void setIcon (char icon) {this.icon = icon;}
-    public String toString () {return String.valueOf(icon);}
+    public void setIcon (char icon) {
+        this.icon = icon;
+    }
+    public String toString () {
+        return String.valueOf(icon);
+    }
 }
