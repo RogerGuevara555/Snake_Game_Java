@@ -1,0 +1,115 @@
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+
+public class SnakeGameSimple {
+    public static void main(String[] args) { 
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
+        Map map = new Map(20, 10);
+        map.displaySnake();
+        map.displayMap();
+        
+        System.out.println();
+    }
+}
+
+
+class Map {
+
+    final char CEIL_ICON = '=';
+    final char WALL = '|';
+    final char CORNER = ':';
+    final char SNAKE_HEAD = 'O';
+    final char SNAKE_BODY = 'o';
+
+    final int X;
+    final int Y;
+    
+    char[][] map;
+    ArrayList<int[]> snakeCoords = new ArrayList<>(
+        List.of(   //{X,Y},
+            new int[]{0,0},
+            new int[]{1,0},
+            new int[]{2,0},
+            new int[]{3,0}
+        )
+    );
+    
+
+    public Map (int X, int Y) {
+        this.X = X;
+        this.Y = Y;
+        this.map = createBoard();
+    }
+
+
+
+    char[][] createBoard () {
+        int yWithBorders = this.Y + 2;
+        int xWithBorders = this.X + 2;
+        char[][] new_map = new char[yWithBorders][xWithBorders];
+
+        for (int row = 1; row < yWithBorders-1; row++) {
+            for (int item = 0; item < xWithBorders; item++) {
+                new_map[row][item] = ' ';
+            //Arrays.fill(row, ' '); 
+            }
+        }
+
+        for (int i = 0; i < xWithBorders; i++) {
+            new_map[0][i] = this.CEIL_ICON;
+            new_map[yWithBorders - 1][i] = this.CEIL_ICON;
+        }
+        for (int i = 1; i < yWithBorders - 1; i++) {
+            new_map[i][0] = this.WALL;
+            new_map[i][xWithBorders - 1] = this.WALL;
+        }
+        new_map[0][0] = this.CORNER;
+        new_map[yWithBorders - 1][0] = this.CORNER;
+        new_map[0][xWithBorders - 1] = this.CORNER;
+        new_map[yWithBorders - 1][xWithBorders - 1] = this.CORNER;
+        return new_map;
+    }
+
+
+
+    public void displayMap () {
+        for (char[] row : this.map) {
+            System.out.println(row);
+        }
+    }
+
+
+    public void displaySnake () {
+        centerSnakeCoord();
+        for (int[] coord : snakeCoords){
+            setMapSlot(coord, SNAKE_BODY);
+        }
+        //setMapSlot(snakeCoords.get(0), SNAKE_HEAD);
+    }
+
+
+    void centerSnakeCoord () {
+        for (int[] coord : snakeCoords){
+            coord[0] += X/2;
+            coord[1] += Y/2;
+        }
+    }
+
+
+    void setMapSlot (int[] coord, char icon) {
+        int coord_X = coord[0]; 
+        int coord_Y = coord[1];
+        map[coord_Y][coord_X] = icon;
+    }
+
+
+
+
+    void walk () {
+
+    }
+}
+

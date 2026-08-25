@@ -38,6 +38,7 @@ class Map {
         this.CEIL = createCeilCharArray();
     }
 
+    
     private MapSlot[][] createMapSlotMatrix () {
         MapSlot[][] map = new MapSlot[this.Y][this.X];
         for (int i = 0; i < this.Y; i++) {
@@ -60,6 +61,7 @@ class Map {
         return ceil;
     }
 
+
     public void displayMap () {
         String ceil = String.valueOf(this.CEIL);
         StringBuilder mapBuilder = new StringBuilder(
@@ -81,6 +83,7 @@ class Map {
         System.out.println(mapBuilder.toString());
     }
 
+
     public void displaySnake () {
         centerSnakeCoord();
         for (int[] coord : snakeCoords){
@@ -89,12 +92,14 @@ class Map {
         getMapSlot(snakeCoords.get(0)).setIcon(SNAKE_HEAD);
     }
 
+
     private void centerSnakeCoord () {
         for (int[] coord : snakeCoords){
             coord[0] += X/2;
             coord[1] += Y/2;
         }
     }
+
 
     private MapSlot getMapSlot (int[] coord) {
         int coord_X = coord[0]; 
@@ -103,6 +108,7 @@ class Map {
     }
 
 }
+
 
 
 class MapSlot {
