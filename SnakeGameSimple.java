@@ -110,12 +110,17 @@ class Map {
         int coord_Y = coord[1];
         map[coord_Y][coord_X] = icon;
     }
+    char getMapSlot (int[] coord) {
+        int coord_X = coord[0]; 
+        int coord_Y = coord[1];
+        return map[coord_Y][coord_X];
+    }
 
 
     int[] direction = {-1,0};  //left
-    //int[] direction = {1,0};   right
-    //int[] direction = {0,1};   up
-    //int[] direction = {0,-1};  down
+  //int[] direction = {1,0};   //right
+  //int[] direction = {0,1};   //up
+  //int[] direction = {0,-1};  //down
 
     public void walk () {
         grow();
@@ -161,14 +166,14 @@ class Map {
 
 
     void getInput () {
-        
+
     }
     
     
     char getFront () {
         int[] headPosition = snakeCoords.get(0);
         int[] frontCoord = sum_vec(headPosition, direction);
-        char front = getBoardSlot(frontCoord);
+        char front = getMapSlot(frontCoord);
         return front;
     }
 
@@ -178,7 +183,9 @@ class Map {
     }
 
 
-    void reloadBoard () {}
+    void reloadBoard () {
+        
+    }
 
 
 }
