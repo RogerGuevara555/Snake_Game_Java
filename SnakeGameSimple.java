@@ -6,22 +6,22 @@ public class SnakeGameSimple {
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        Map map = new Map(20, 10);
-        map.centerSnakeCoord();
-        map.displaySnake();
-        map.displayMap();
+        Board board = new Board(20, 10);
+        board.centerSnakeCoord();
+        board.displaySnake();
+        board.displayBoard();
 
-        map.walk();
+        board.walk();
         
-        map.displaySnake();
-        map.displayMap();
+        board.displaySnake();
+        board.displayBoard();
         
         System.out.println();
     }
 }
 
 
-class Map {
+class Board {
 
     final char CEIL_ICON = '=';
     final char WALL = '|';
@@ -33,7 +33,7 @@ class Map {
     final int X;
     final int Y;
     
-    char[][] map;
+    char[][] board;
     ArrayList<int[]> snakeCoords = new ArrayList<>(
         List.of(   //{X,Y},
             new int[]{0,0},
@@ -45,45 +45,45 @@ class Map {
     int snakeSize = snakeCoords.size();
 
 
-    public Map (int X, int Y) {
+    public Board (int X, int Y) {
         this.X = X;
         this.Y = Y;
-        this.map = createBoard();
+        this.board = createBoard();
     }
 
 
 
     char[][] createBoard () {
-        int yWithBorders = this.Y + 2;
-        int xWithBorders = this.X + 2;
-        char[][] new_map = new char[yWithBorders][xWithBorders];
+        int yWithBorders = Y + 2;
+        int xWithBorders = X + 2;
+        char[][] new_board = new char[yWithBorders][xWithBorders];
 
         for (int row = 1; row < yWithBorders-1; row++) {
             for (int item = 0; item < xWithBorders; item++) {
-                new_map[row][item] = ' ';
+                new_board[row][item] = ' ';
             //Arrays.fill(row, ' '); 
             }
         }
 
         for (int i = 0; i < xWithBorders; i++) {
-            new_map[0][i] = this.CEIL_ICON;
-            new_map[yWithBorders - 1][i] = this.CEIL_ICON;
+            new_board[0][i] = CEIL_ICON;
+            new_board[yWithBorders - 1][i] = CEIL_ICON;
         }
         for (int i = 1; i < yWithBorders - 1; i++) {
-            new_map[i][0] = this.WALL;
-            new_map[i][xWithBorders - 1] = this.WALL;
+            new_board[i][0] = WALL;
+            new_board[i][xWithBorders - 1] = WALL;
         }
-        new_map[0][0] = this.CORNER;
-        new_map[yWithBorders - 1][0] = this.CORNER;
-        new_map[0][xWithBorders - 1] = this.CORNER;
-        new_map[yWithBorders - 1][xWithBorders - 1] = this.CORNER;
-        return new_map;
+        new_board[0][0] = CORNER;
+        new_board[yWithBorders - 1][0] = CORNER;
+        new_board[0][xWithBorders - 1] = CORNER;
+        new_board[yWithBorders - 1][xWithBorders - 1] = CORNER;
+        return new_board;
     }
 
 
 
-    public void displayMap () {
-        for (char[] row : this.map) {
+    public void displayBoard () {
+        for (char[] row : board) {
             System.out.println(row);
         }
     }
@@ -91,9 +91,9 @@ class Map {
 
     public void displaySnake () {
         for (int[] coord : snakeCoords){
-            setMapSlot(coord, SNAKE_BODY);
+            setBoardSlot(coord, SNAKE_BODY);
         }
-        //setMapSlot(snakeCoords.get(0), SNAKE_HEAD);
+        //setBoardSlot(snakeCoords.get(0), SNAKE_HEAD);
     }
 
 
@@ -105,15 +105,15 @@ class Map {
     }
 
 
-    void setMapSlot (int[] coord, char icon) {
+    void setBoardSlot (int[] coord, char icon) {
         int coord_X = coord[0]; 
         int coord_Y = coord[1];
-        map[coord_Y][coord_X] = icon;
+        board[coord_Y][coord_X] = icon;
     }
-    char getMapSlot (int[] coord) {
+    char getBoardSlot (int[] coord) {
         int coord_X = coord[0]; 
         int coord_Y = coord[1];
-        return map[coord_Y][coord_X];
+        return board[coord_Y][coord_X];
     }
 
 
@@ -173,7 +173,7 @@ class Map {
     char getFront () {
         int[] headPosition = snakeCoords.get(0);
         int[] frontCoord = sum_vec(headPosition, direction);
-        char front = getMapSlot(frontCoord);
+        char front = getBoardSlot(frontCoord);
         return front;
     }
 
