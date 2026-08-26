@@ -28,6 +28,7 @@ class Map {
     final char CORNER = ':';
     final char SNAKE_HEAD = 'O';
     final char SNAKE_BODY = 'o';
+    final char FOOD = 'à';
 
     final int X;
     final int Y;
@@ -42,6 +43,7 @@ class Map {
         )
     );
     int snakeSize = snakeCoords.size();
+
 
     public Map (int X, int Y) {
         this.X = X;
@@ -116,10 +118,15 @@ class Map {
     //int[] direction = {0,-1};  down
 
     public void walk () {
-        int[] snakeHead = snakeCoords.get(0);
-        int[] newSnakeHead = sum_vec(snakeHead, direction);
+        grow();
         snakeCoords.remove(snakeSize-1);
-        snakeCoords.add(0, newSnakeHead);
+    }
+    
+    
+    public void grow () {
+        int[] headPosition = snakeCoords.get(0);
+        int[] newHeadPosition = sum_vec(headPosition, direction);
+        snakeCoords.add(0, newHeadPosition);
     }
 
 
@@ -132,6 +139,44 @@ class Map {
 
 
 
+
+    public void gameLoop () {
+        while (true) {
+            getInput();
+            char front = getFront();
+
+            if (front == ' ') {
+                walk();
+            } else if (front == FOOD) {
+                grow();
+            } else if (front == SNAKE_BODY || front == WALL) {
+                printGameOver();
+                break;
+            }
+
+            reloadBoard();
+        }
+    }
+
+
+
+    void getInput () {
+        
+    }
     
+    
+    char getFront () {
+        return 'a';
+    }
+
+
+    void printGameOver () {
+
+    }
+
+
+    void reloadBoard () {}
+
+
 }
 
