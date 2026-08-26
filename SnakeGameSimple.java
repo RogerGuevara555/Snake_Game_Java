@@ -166,7 +166,10 @@ class Map {
     
     
     char getFront () {
-        return 'a';
+        int[] headPosition = snakeCoords.get(0);
+        int[] frontCoord = sum_vec(headPosition, direction);
+        char front = getBoardSlot(frontCoord);
+        return front;
     }
 
 
