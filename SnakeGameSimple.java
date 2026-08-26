@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
 
 public class SnakeGameSimple {
@@ -8,6 +7,12 @@ public class SnakeGameSimple {
         System.out.flush();
 
         Map map = new Map(20, 10);
+        map.centerSnakeCoord();
+        map.displaySnake();
+        map.displayMap();
+
+        map.walk();
+        
         map.displaySnake();
         map.displayMap();
         
@@ -36,7 +41,7 @@ class Map {
             new int[]{3,0}
         )
     );
-    
+    int snakeSize = snakeCoords.size();
 
     public Map (int X, int Y) {
         this.X = X;
@@ -83,7 +88,6 @@ class Map {
 
 
     public void displaySnake () {
-        centerSnakeCoord();
         for (int[] coord : snakeCoords){
             setMapSlot(coord, SNAKE_BODY);
         }
@@ -91,7 +95,7 @@ class Map {
     }
 
 
-    void centerSnakeCoord () {
+    public void centerSnakeCoord () {
         for (int[] coord : snakeCoords){
             coord[0] += X/2;
             coord[1] += Y/2;
@@ -106,10 +110,28 @@ class Map {
     }
 
 
+    int[] direction = {-1,0};  //left
+    //int[] direction = {1,0};   right
+    //int[] direction = {0,1};   up
+    //int[] direction = {0,-1};  down
 
-
-    void walk () {
-
+    public void walk () {
+        int[] snakeHead = snakeCoords.get(0);
+        int[] newSnakeHead = sum_vec(snakeHead, direction);
+        snakeCoords.remove(snakeSize-1);
+        snakeCoords.add(0, newSnakeHead);
     }
+
+
+    int[] sum_vec (int[] v1, int[] v2) {
+        int v3_x = v1[0] + v2[0];
+        int v3_y = v1[1] + v2[1];
+        int[] v3 = {v3_x, v3_y};
+        return v3;
+    }
+
+
+
+    
 }
 
