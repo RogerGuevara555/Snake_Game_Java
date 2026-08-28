@@ -43,6 +43,11 @@ class Board {
         )
     );
     int snakeSize = snakeCoords.size();
+    int[] direction = {-1,0};  //left
+  //int[] direction = {1,0};   //right
+  //int[] direction = {0,1};   //up
+  //int[] direction = {0,-1};  //down
+
 
 
     public Board (int X, int Y) {
@@ -50,6 +55,92 @@ class Board {
         this.Y = Y;
         this.board = createBoard();
     }
+
+    
+    
+    public void gameLoop () {
+        while (true) {
+            reloadBoard();
+            getInput();
+            char front = getFront();
+
+            if (front == ' ') {
+                walk();
+            } else if (front == FOOD) {
+                grow();
+            } else if (front == SNAKE_BODY || front == WALL) {
+                printGameOver();
+                break;
+            }
+        }
+    }
+
+
+
+    void getInput () {
+
+    }
+    
+    
+    char getFront () {
+        int[] headPosition = snakeCoords.get(0);
+        int[] frontCoord = sum_vec(headPosition, direction);
+        char front = getBoardSlot(frontCoord);
+        return front;
+    }
+
+
+    public void walk () {
+        grow();
+        snakeCoords.remove(snakeSize-1);
+    }
+    
+    
+    public void grow () {
+        int[] headPosition = snakeCoords.get(0);
+        int[] frontCoord = sum_vec(headPosition, direction);
+        snakeCoords.add(0, frontCoord);
+    }
+
+
+    int[] sum_vec (int[] v1, int[] v2) {
+        int v3_x = v1[0] + v2[0];
+        int v3_y = v1[1] + v2[1];
+        int[] v3 = {v3_x, v3_y};
+        return v3;
+    }
+
+    
+    void setBoardSlot (int[] coord, char icon) {
+        int coord_X = coord[0]; 
+        int coord_Y = coord[1];
+        board[coord_Y][coord_X] = icon;
+    }
+    char getBoardSlot (int[] coord) {
+        int coord_X = coord[0]; 
+        int coord_Y = coord[1];
+        return board[coord_Y][coord_X];
+    }
+
+
+    void printGameOver () {
+        String gameOver = """
+                 _____                        _____                
+                |  __ \\                      |  _  |               
+                | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __ 
+                | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|
+                | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   
+                 \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
+                """;;
+        System.out.println(gameOver);
+    }
+
+
+
+    void reloadBoard () {
+        
+    }
+
 
 
 
@@ -88,15 +179,7 @@ class Board {
         }
     }
 
-
-    public void displaySnake () {
-        for (int[] coord : snakeCoords){
-            setBoardSlot(coord, SNAKE_BODY);
-        }
-        //setBoardSlot(snakeCoords.get(0), SNAKE_HEAD);
-    }
-
-
+    
     public void centerSnakeCoord () {
         for (int[] coord : snakeCoords){
             coord[0] += X/2;
@@ -105,87 +188,13 @@ class Board {
     }
 
 
-    void setBoardSlot (int[] coord, char icon) {
-        int coord_X = coord[0]; 
-        int coord_Y = coord[1];
-        board[coord_Y][coord_X] = icon;
-    }
-    char getBoardSlot (int[] coord) {
-        int coord_X = coord[0]; 
-        int coord_Y = coord[1];
-        return board[coord_Y][coord_X];
-    }
-
-
-    int[] direction = {-1,0};  //left
-  //int[] direction = {1,0};   //right
-  //int[] direction = {0,1};   //up
-  //int[] direction = {0,-1};  //down
-
-    public void walk () {
-        grow();
-        snakeCoords.remove(snakeSize-1);
-    }
-    
-    
-    public void grow () {
-        int[] headPosition = snakeCoords.get(0);
-        int[] newHeadPosition = sum_vec(headPosition, direction);
-        snakeCoords.add(0, newHeadPosition);
-    }
-
-
-    int[] sum_vec (int[] v1, int[] v2) {
-        int v3_x = v1[0] + v2[0];
-        int v3_y = v1[1] + v2[1];
-        int[] v3 = {v3_x, v3_y};
-        return v3;
-    }
-
-
-
-
-    public void gameLoop () {
-        while (true) {
-            getInput();
-            char front = getFront();
-
-            if (front == ' ') {
-                walk();
-            } else if (front == FOOD) {
-                grow();
-            } else if (front == SNAKE_BODY || front == WALL) {
-                printGameOver();
-                break;
-            }
-
-            reloadBoard();
+    public void displaySnake () {
+        for (int[] coord : snakeCoords){
+            setBoardSlot(coord, SNAKE_BODY);
         }
+        //setBoardSlot(snakeCoords.get(0), SNAKE_HEAD);
     }
 
-
-
-    void getInput () {
-
-    }
-    
-    
-    char getFront () {
-        int[] headPosition = snakeCoords.get(0);
-        int[] frontCoord = sum_vec(headPosition, direction);
-        char front = getBoardSlot(frontCoord);
-        return front;
-    }
-
-
-    void printGameOver () {
-
-    }
-
-
-    void reloadBoard () {
-        
-    }
 
 
 }
