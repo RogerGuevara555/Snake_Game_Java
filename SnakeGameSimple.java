@@ -71,20 +71,13 @@ class Board {
         }
     }
     
-    
-    void waitCoolDown () {
-        try {
-            Thread.sleep(100); // Pausa 1 segundo
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
 
 
     void updateBoard () {
         updateAtributes();
         cleanTerminal();
         displaySnake();
+        displayHead();
         displayBoard();
     }
 
@@ -136,6 +129,15 @@ class Board {
     }
 
 
+    void waitCoolDown () {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
     void cleanTerminal () {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -165,7 +167,6 @@ class Board {
         for (int row = 1; row < yWithBorders-1; row++) {
             for (int item = 0; item < xWithBorders; item++) {
                 new_board[row][item] = ' ';
-            //Arrays.fill(row, ' '); 
             }
         }
 
@@ -206,10 +207,14 @@ class Board {
         for (int[] coord : snakeCoords){
             setBoardSlot(coord, SNAKE_BODY);
         }
-        //setBoardSlot(snakeCoords.get(0), SNAKE_HEAD);
     }
 
 
+    void displayHead () {
+        int[] neckCoord = snakeCoords.get(1);
+        setBoardSlot(headCoord, SNAKE_HEAD);
+        setBoardSlot(neckCoord, SNAKE_BODY);
+    }
 
 }
 
