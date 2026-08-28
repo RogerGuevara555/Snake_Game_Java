@@ -3,18 +3,11 @@ import java.util.ArrayList;
 
 public class SnakeGameSimple {
     public static void main(String[] args) { 
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
         Board board = new Board(20, 10);
         board.centerSnakeCoord();
-        board.displaySnake();
-        board.displayBoard();
-
-        board.walk();
         
-        board.displaySnake();
-        board.displayBoard();
+        board.gameLoop();
         
         System.out.println();
     }
@@ -42,12 +35,15 @@ class Board {
             new int[]{3,0}
         )
     );
-    int snakeSize = snakeCoords.size();
+    int snakeSize;
+    int[] headCoord;
+    int[] tailCoord;
+    int[] frontCoord;
+    char front;
     int[] direction = {-1,0};  //left
   //int[] direction = {1,0};   //right
   //int[] direction = {0,1};   //up
   //int[] direction = {0,-1};  //down
-
 
 
     public Board (int X, int Y) {
@@ -60,9 +56,7 @@ class Board {
     
     public void gameLoop () {
         while (true) {
-            reloadBoard();
-            getInput();
-            char front = getFront();
+            updateBoard();
 
             if (front == ' ') {
                 walk();
@@ -72,33 +66,52 @@ class Board {
                 printGameOver();
                 break;
             }
+
+            waitCoolDown();
+        }
+    }
+    
+    
+    void waitCoolDown () {
+        try {
+            Thread.sleep(100); // Pausa 1 segundo
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
+
+    void updateBoard () {
+        updateAtributes();
+        cleanTerminal();
+        displaySnake();
+        displayBoard();
+    }
+
+
+    void updateAtributes () {
+        //direction = getIntput();
+        snakeSize = snakeCoords.size();
+        headCoord = snakeCoords.get(0);
+        tailCoord = snakeCoords.get(snakeSize-1);
+        frontCoord = sum_vec(headCoord, direction);
+        front = getBoardSlot(frontCoord);
+    }
 
 
     void getInput () {
 
     }
-    
-    
-    char getFront () {
-        int[] headPosition = snakeCoords.get(0);
-        int[] frontCoord = sum_vec(headPosition, direction);
-        char front = getBoardSlot(frontCoord);
-        return front;
-    }
 
 
     public void walk () {
-        grow();
-        snakeCoords.remove(snakeSize-1);
+        snakeCoords.add(0, frontCoord);
+        snakeCoords.remove(snakeSize);
+        setBoardSlot(tailCoord, ' ');
     }
     
     
     public void grow () {
-        int[] headPosition = snakeCoords.get(0);
-        int[] frontCoord = sum_vec(headPosition, direction);
         snakeCoords.add(0, frontCoord);
     }
 
@@ -123,6 +136,12 @@ class Board {
     }
 
 
+    void cleanTerminal () {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+
     void printGameOver () {
         String gameOver = """
                  _____                        _____                
@@ -133,12 +152,6 @@ class Board {
                  \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
                 """;;
         System.out.println(gameOver);
-    }
-
-
-
-    void reloadBoard () {
-        
     }
 
 
@@ -170,6 +183,7 @@ class Board {
         new_board[yWithBorders - 1][xWithBorders - 1] = CORNER;
         return new_board;
     }
+
 
 
 
