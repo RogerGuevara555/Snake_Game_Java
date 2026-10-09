@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 
-public class SnakeGameSimple {
+public class SG_v0_5 {
     public static void main(String[] args) { 
 
         Board board = new Board(20, 10);
