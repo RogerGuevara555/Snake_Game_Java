@@ -4,14 +4,21 @@ public class SnakeGame {
 
     public static void main (String[] args) {
 
-        char[][] board = makeBoard(10, 5);
+        char[][] board = makeBoard(5, 3);
         String pBoard = makePrintableBoard(board);
 
         System.out.println(pBoard);
         
     }
 
+    static final String CEIL_ICON = "=";
+    static final String WALL = "|";
+    static final String CORNER = ":";
+    static final String SNAKE_HEAD = "O";
+    static final String SNAKE_BODY = "o";
+    static final String FOOD = "à";
 
+    
     static char[][] makeBoard (int x, int y) {
         char[][] newBoard = new char[y][x];
 
@@ -28,15 +35,16 @@ public class SnakeGame {
     static String makePrintableBoard (char[][] board) {
         String printableBoard = "";
         List<String> prePrintableBoard = new ArrayList<>();
+        String ceil = CORNER + CEIL_ICON.repeat(board[0].length) + CORNER + "\n";
         
         for (char[] row : board) {
             String rowString = new String(row);
-            prePrintableBoard.add(rowString + "\n");
+            prePrintableBoard.add(rowString);
         } 
-        for (String row : prePrintableBoard) {
-            printableBoard = printableBoard.concat(row);
-        }
+        printableBoard += ceil;
+        for (String row : prePrintableBoard) {printableBoard += WALL + row + WALL + "\n";}
+        printableBoard += ceil;
 
-        return printableBoard;
+        return "\n" + printableBoard;
     }
 }
