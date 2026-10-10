@@ -36,10 +36,10 @@ class Board {
         )
     );
     int snakeSize;
+    char front;
+    int[] frontCoord;
     int[] headCoord;
     int[] tailCoord;
-    int[] frontCoord;
-    char front;
     int[] direction = {-1,0};  //left
   //int[] direction = {1,0};   //right
   //int[] direction = {0,1};   //up
