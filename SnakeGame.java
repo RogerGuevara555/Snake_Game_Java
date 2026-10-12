@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class SnakeGame {
     public static void main(String[] args) { 
 
-        board = makeBoard(20, 10);
+        board = makeBoard(50, 20);
         centerSnakeCoord();
         
         gameLoop();
@@ -48,11 +48,11 @@ public class SnakeGame {
             updateBoard();
 
             if (front == SPACE) {
-                walk();
+                walk(false);
             } else if (front == FOOD) {
-                grow();
+                walk(true);
             } else if (front == SNAKE_BODY || front == WALL) {
-                printGameOver();
+                Interface.printGameOver();
                 break;
             }
 
@@ -61,17 +61,16 @@ public class SnakeGame {
     }
     
 
-
     static void updateBoard () {
-        updateAtributes();
         cleanTerminal();
+        updateStates();
         displaySnake();
         displayHead();
-        displayBoard();
+        Interface.displayBoard(board);
     }
 
 
-    static void updateAtributes () {
+    static void updateStates () {
         //direction = getIntput();
         snakeSize = snakeCoords.size();
         headCoord = snakeCoords.get(0);
@@ -86,15 +85,12 @@ public class SnakeGame {
     }
 
 
-    static void walk () {
+    static void walk (boolean grow) {
         snakeCoords.add(0, frontCoord);
-        snakeCoords.remove(snakeSize);
-        setBoardSlot(tailCoord, SPACE);
-    }
-    
-    
-    static void grow () {
-        snakeCoords.add(0, frontCoord);
+        if (!grow) {
+            snakeCoords.remove(snakeSize);
+            setBoardSlot(tailCoord, SPACE);
+        }
     }
 
 
@@ -139,21 +135,6 @@ public class SnakeGame {
     }
 
 
-    static void printGameOver () {
-        String gameOver = """
-                 _____                        _____                
-                |  __ \\                      |  _  |               
-                | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __ 
-                | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|
-                | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   
-                 \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
-                """;;
-        System.out.println(gameOver);
-    }
-
-
-
-
     static char[][] makeBoard (int x, int y) {
         char[][] newBoard = new char[y][x];
 
@@ -164,32 +145,6 @@ public class SnakeGame {
         }
         
         return newBoard;
-    }
-    static String makePrintableBoard (char[][] board) {
-        String printableBoard = "";
-        List<String> prePrintableBoard = new ArrayList<>();
-        String ceilIconString = String.valueOf(CEIL_ICON);
-        String cornerString = String.valueOf(CORNER);
-
-        String ceil = cornerString + ceilIconString.repeat(board[0].length) + cornerString + "\n";
-        
-        for (char[] row : board) {
-            String rowString = new String(row);
-            prePrintableBoard.add(rowString);
-        } 
-        printableBoard += ceil;
-        for (String row : prePrintableBoard) {printableBoard += WALL + row + WALL + "\n";}
-        printableBoard += ceil;
-
-        return "\n" + printableBoard;
-    }
-
-
-
-
-    static void displayBoard () {
-        String pBoard = makePrintableBoard(board);
-        System.out.println(pBoard);
     }
 
     
