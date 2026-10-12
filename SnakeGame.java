@@ -77,10 +77,7 @@ public class SnakeGame {
         headCoord = snakeCoords.get(0);
         tailCoord = snakeCoords.get(snakeSize-1);
         frontCoord = sum_vec(headCoord, direction);
-        if (frontCoord[0]>=0 && frontCoord[0]<board[0].length && frontCoord[1]>=0 && frontCoord[1]<board.length)
-            front = getBoardSlot(frontCoord);
-        else
-            front = WALL;
+        front = getBoardSlot(frontCoord);
     }
 
 
@@ -117,7 +114,13 @@ public class SnakeGame {
     static char getBoardSlot (int[] coord) {
         int coord_X = coord[0]; 
         int coord_Y = coord[1];
-        return board[coord_Y][coord_X];
+        boolean inRangeX = coord_X>=0 && coord_X<board[0].length;
+        boolean inRangeY = coord_Y>=0 && coord_Y<board.length;
+
+        if (inRangeX && inRangeY)
+            return board[coord_Y][coord_X];
+        else
+            return WALL;
     }
 
 
