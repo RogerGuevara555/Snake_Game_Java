@@ -16,9 +16,9 @@ public class SnakeGame {
     static final char CEIL_ICON = '=';
     static final char WALL = '|';
     static final char CORNER = ':';
-    static final char SNAKE_HEAD = 'O';
-    static final char SNAKE_BODY = 'o';
-    static final char FOOD = 'à';
+    static final char SNAKE_HEAD = 'O';     // Refactorizar en clase Slot que reciba un char y diga si 
+    static final char SNAKE_BODY = 'o';     //es comida, cuerpo o vacío, o que tenga métodos para comprobar
+    static final char FOOD = 'à';           //si un slot es alguno de esos (mejor la segunda opción)
     static final char SPACE = '-';
 
     
@@ -27,7 +27,7 @@ public class SnakeGame {
         List.of(   //{X,Y},
             new int[]{0,0},
             new int[]{1,0},
-            new int[]{2,0},
+            new int[]{2,0},     // Refactorizar en clase Snake
             new int[]{3,0}
         )
     );
@@ -47,7 +47,7 @@ public class SnakeGame {
         while (true) {
             updateBoard();
 
-            if (front == SPACE) {
+            if (front == SPACE) {  //en plan    Slot.isSpace(front)
                 walk(false);
             } else if (front == FOOD) {
                 walk(true);
@@ -64,9 +64,9 @@ public class SnakeGame {
     static void updateBoard () {
         cleanTerminal();
         updateStates();
-        displaySnake();
-        displayHead();
-        Interface.displayBoard(board);
+        displaySnake();         
+        displayHead(); // <-- Eso debería sser cosa de la interfaz. Sería mejor procesar 
+        Interface.displayBoard(board);// el board como un char[][] con solo números y espacios o algo así
     }
 
 
@@ -74,7 +74,7 @@ public class SnakeGame {
         //direction = getIntput();
         snakeSize = snakeCoords.size();
         headCoord = snakeCoords.get(0);
-        tailCoord = snakeCoords.get(snakeSize-1);
+        tailCoord = snakeCoords.get(snakeSize-1);   // estas variables deberían crearse y actualizarse solo en donde sean necesarias
         frontCoord = sum_vec(headCoord, direction);
         front = getBoardSlot(frontCoord);
     }
@@ -139,8 +139,8 @@ public class SnakeGame {
         char[][] newBoard = new char[y][x];
 
         for (int row = 0; row < y; row++) {
-            for (int slot = 0; slot < x; slot++) {
-                newBoard[row][slot] = SPACE;
+            for (int slot = 0; slot < x; slot++) {      // Quizas en cada iteración debería llamarse a 
+                newBoard[row][slot] = SPACE;            //esta función para tener un tablero limpio cada vez 
             }
         }
         
@@ -150,7 +150,7 @@ public class SnakeGame {
     
     static void centerSnakeCoord () {
         for (int[] coord : snakeCoords){
-            coord[0] += board[0].length/2;
+            coord[0] += board[0].length/2;          // ya veré donde pongo mejor esto
             coord[1] += board.length/2;
         }
     }
@@ -164,7 +164,7 @@ public class SnakeGame {
 
 
     static void displayHead () {
-        int[] neckCoord = snakeCoords.get(1);
+        int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la interfaz
         setBoardSlot(headCoord, SNAKE_HEAD);
         setBoardSlot(neckCoord, SNAKE_BODY);
     }
