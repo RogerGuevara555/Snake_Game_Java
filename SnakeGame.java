@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class SnakeGame {
+    
     public static void main(String[] args) { 
 
         board = makeBoard(50, 20);
@@ -13,13 +14,13 @@ public class SnakeGame {
     }
 
 
-    static final char CEIL_ICON = '=';
-    static final char WALL = '|';
-    static final char CORNER = ':';
+    // static final char CEIL_ICON = '=';
+    // static final char WALL = '|';
+    // static final char CORNER = ':';
     static final char SNAKE_HEAD = 'O';     // Refactorizar en clase Slot que reciba un char y diga si 
-    static final char SNAKE_BODY = 'o';     //es comida, cuerpo o vacío, o que tenga métodos para comprobar
-    static final char FOOD = 'à';           //si un slot es alguno de esos (mejor la segunda opción)
-    static final char SPACE = '-';
+    // static final char SNAKE_BODY = 'o';     //es comida, cuerpo o vacío, o que tenga métodos para comprobar
+    // static final char FOOD = 'à';           //si un slot es alguno de esos (mejor la segunda opción)
+    // static final char SPACE = '-';
 
     
     static char[][] board;
@@ -47,11 +48,11 @@ public class SnakeGame {
         while (true) {
             updateBoard();
 
-            if (front == SPACE) {  //en plan    Slot.isSpace(front)
+            if ( SpaceSlot.isType(front) ) {  //en plan    Slot.isSpace(front)
                 walk(false);
-            } else if (front == FOOD) {
+            } else if ( AppleSlot.isType(front) ) {
                 walk(true);
-            } else if (front == SNAKE_BODY || front == WALL) {
+            } else if ( SnakeSlot.isType(front) || WallSlot.isType(front) ) {
                 Interface.printGameOver();
                 break;
             }
@@ -65,7 +66,7 @@ public class SnakeGame {
         cleanTerminal();
         updateStates();
         displaySnake();         
-        displayHead(); // <-- Eso debería sser cosa de la interfaz. Sería mejor procesar 
+        displayHead(); // <-- Eso debería ser cosa de la interfaz. Sería mejor procesar 
         Interface.displayBoard(board);// el board como un char[][] con solo números y espacios o algo así
     }
 
@@ -89,7 +90,7 @@ public class SnakeGame {
         snakeCoords.add(0, frontCoord);
         if (!grow) {
             snakeCoords.remove(snakeSize);
-            setBoardSlot(tailCoord, SPACE);
+            setBoardSlot(tailCoord, SpaceSlot.getRepr());
         }
     }
 
@@ -116,7 +117,7 @@ public class SnakeGame {
         if (inRangeX && inRangeY)
             return board[coord_Y][coord_X];
         else
-            return WALL;
+            return WallSlot.getRepr();
     }
 
 
@@ -140,7 +141,7 @@ public class SnakeGame {
 
         for (int row = 0; row < y; row++) {
             for (int slot = 0; slot < x; slot++) {      // Quizas en cada iteración debería llamarse a 
-                newBoard[row][slot] = SPACE;            //esta función para tener un tablero limpio cada vez 
+                newBoard[row][slot] = SpaceSlot.getRepr();            //esta función para tener un tablero limpio cada vez 
             }
         }
         
@@ -158,7 +159,7 @@ public class SnakeGame {
 
     static void displaySnake () {
         for (int[] coord : snakeCoords){
-            setBoardSlot(coord, SNAKE_BODY);
+            setBoardSlot(coord, SnakeSlot.getRepr());
         }
     }
 
@@ -166,8 +167,30 @@ public class SnakeGame {
     static void displayHead () {
         int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la interfaz
         setBoardSlot(headCoord, SNAKE_HEAD);
-        setBoardSlot(neckCoord, SNAKE_BODY);
+        setBoardSlot(neckCoord, SnakeSlot.getRepr());
     }
 
 }
+
+
+enum Slot {
+    VoidSlot('-'),
+    SnakeSlot('1'),
+    AppleSlot('2'),
+    WallSlot('3');
+    
+    private final char repr;
+
+    Slot (char icon) {
+        this.repr = icon;
+    }
+
+    static char getRepr () {return repr;}
+    
+    static boolean isType (Slot slot, char icon) {
+        return slot.repr == getRepr();
+    }
+}
+
+
 
