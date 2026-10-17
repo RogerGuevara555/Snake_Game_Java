@@ -7,7 +7,6 @@ public class SnakeGame {    // dejar esta clase como main
         board = makeBoard(50, 20);
         Snake snake = new Snake(board);        
         gameLoop(snake);
-        
         System.out.println();
     }
 
@@ -25,7 +24,7 @@ public class SnakeGame {    // dejar esta clase como main
             } else if ( Slot.APPLE.isThis(front) ) {
                 snake.walk(true);
             } else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {
-                Restile.printGameOver();
+                Interface.printGameOver();
                 break;
             }
 
@@ -35,11 +34,11 @@ public class SnakeGame {    // dejar esta clase como main
     
 
     static void updateBoard (Snake snake) {
-        cleanTerminal();
+        Interface.cleanTerminal();
         board = makeBoard(50, 20);
         displaySnake(snake);         
-        displayHead(snake); // <-- Eso debería ser cosa del restile (no la interfaz ni el board). Sería mejor procesar 
-        Restile.displayBoard(board);// el board como un char[][] con solo números y espacios o algo así
+        displayHead(snake);                      // <-- Eso debería ser cosa del Restile (no la interfaz ni el board). Sería mejor procesar 
+        Restile.displayBoard(board, snake);            // el board como un char[][] con solo números y espacios o algo así
     }
     
     
@@ -70,28 +69,21 @@ public class SnakeGame {    // dejar esta clase como main
     }
 
 
-    static void cleanTerminal () {
-        System.out.print("\033[H\033[2J");  //esto debería ser de la interafaz
-        System.out.flush();
-    }
-
-
     public static char[][] makeBoard (int x, int y) {
         char[][] newBoard = new char[y][x];
 
-        for (int row = 0; row < y; row++) {
+        for (int row = 0; row < y; row++) {                      //    LISTO!!
             for (int slot = 0; slot < x; slot++) {              // Quizas en cada iteración debería llamarse a 
-                newBoard[row][slot] = Slot.VOID.getRepr();            //esta función para tener un tablero limpio cada vez 
+                newBoard[row][slot] = Slot.VOID.getRepr();     //esta función para tener un tablero limpio cada vez 
             }
         }
-        
         return newBoard;
     }
 
 
-    static void displaySnake (Snake snake) {
-        for (int[] coord : snake.getCoords()){              //esto debería recibir el tablero y devolver uno nuevo con la serpiente dentro
-            setBoardSlot(coord, Slot.SNAKE.getRepr());//y debería estar dentro de una clase serpiente
+    static void displaySnake (Snake snake) {                 //      Que se llame makeBoardWithSnake() y que siga siendo static
+        for (int[] coord : snake.getCoords()){              //Esto debería recibir un board y un snake, y retornar un board con snake
+            setBoardSlot(coord, Slot.SNAKE.getRepr());     //    ( Board + Snake = BoardWithSnake )
         }
     }
 
@@ -99,12 +91,11 @@ public class SnakeGame {    // dejar esta clase como main
     static final char SNAKE_HEAD = 'O';     
     static void displayHead (Snake snake) {
         List<int[]> snakeCoords = snake.getCoords();
-        int[] headCoord = snakeCoords.getFirst();   // Probablemente meta esto en la clase estilo
+        int[] headCoord = snakeCoords.getFirst();      
         int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la clase estilo
         setBoardSlot(headCoord, SNAKE_HEAD);
         setBoardSlot(neckCoord, Slot.SNAKE.getRepr());
     }
-
 }
 
 
@@ -130,4 +121,23 @@ enum Slot {
 }
 
 
+class Interface {
+    
+    static void cleanTerminal () {
+        System.out.print("\033[H\033[2J");  //esto debería ser de la interafaz
+        System.out.flush();
+    }
 
+
+    public static void printGameOver () {
+        String gameOver = """
+                 _____                        _____                
+                |  __ \\                      |  _  |               
+                | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __ 
+                | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|
+                | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   
+                 \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
+                """;;
+        System.out.println(gameOver);
+    }
+}

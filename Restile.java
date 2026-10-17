@@ -3,50 +3,57 @@ import java.util.List;
 
 public class Restile {
     
-    static final char CEIL_ICON = '=';
-    static final char WALL = '|';
-    static final char CORNER = ':';
-    static final char SNAKE_HEAD = 'O';
-    static final char SNAKE_BODY = 'o';
-    static final char FOOD = 'à';
-    static final char SPACE = '-';
+    static final String CEIL_ICON = "=";
+    static final String WALL = "|";
+    static final String CORNER = ":";
+    static final String SNAKE_HEAD = "O";
+    static final String SNAKE_BODY = "o";
+    static final String FOOD = "à";
+    static final String SPACE = "-";
 
 
-    public static void displayBoard (char[][] board) {
-        String pBoard = makePrintableBoard(board);
+    public static void displayBoard (char[][] board, Snake snake) {
+        int[] headCoord = snake.getCoords().getFirst();
+        String[][] sBoard = changeMatrixType(board);
+        String[][] shBoard = displayHead(sBoard, headCoord);
+        String pBoard = makePrintableBoard(shBoard);
         System.out.println(pBoard);
     }
 
-    static String makePrintableBoard (char[][] board) {
+    
+    
+    static String[][] displayHead (String[][] board, int[] headCoord) {
+        String[][] newBoard = board;
+        newBoard[headCoord[1]][headCoord[0]] = SNAKE_HEAD;
+        return newBoard;
+    }
+    
+
+    static String[][] changeMatrixType (char[][] board) {
+        String[][] newStringBoard = new String[board.length][board[0].length];
+        for (int i=0; i<board.length; i++) {
+            for (int j=0; j<board[0].length; j++) {
+                newStringBoard[i][j] = String.valueOf(board[i][j]);
+            }
+        }
+        return newStringBoard;
+    }
+    
+    
+    static String makePrintableBoard (String[][] board) {
         String printableBoard = "";
         List<String> prePrintableBoard = new ArrayList<>();
-        String ceilIconString = String.valueOf(CEIL_ICON);
-        String cornerString = String.valueOf(CORNER);
-
-        String ceil = cornerString + ceilIconString.repeat(board[0].length) + cornerString + "\n";
+    
+        String ceil = CORNER + CEIL_ICON.repeat(board[0].length) + CEIL_ICON + "\n";
         
-        for (char[] row : board) {
-            String rowString = new String(row);
+        for (String[] row : board) {
+            String rowString = String.join("", row);
             prePrintableBoard.add(rowString);
         } 
         printableBoard += ceil;
         for (String row : prePrintableBoard) {printableBoard += WALL + row + WALL + "\n";}
         printableBoard += ceil;
-
+    
         return "\n" + printableBoard;
     }
-
-
-    public static void printGameOver () {
-        String gameOver = """
-                 _____                        _____                
-                |  __ \\                      |  _  |               
-                | |  \\/ __ _ _ __ ___   ___  | | | |_   _____ _ __ 
-                | | __ / _` | '_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ '__|
-                | |_\\ \\ (_| | | | | | |  __/ \\ \\_/ /\\ V /  __/ |   
-                 \\____/\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|   
-                """;;
-        System.out.println(gameOver);
-    }
-
 }
