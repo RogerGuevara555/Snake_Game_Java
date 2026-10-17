@@ -13,15 +13,6 @@ public class SnakeGame {
         System.out.println();
     }
 
-
-    // static final char CEIL_ICON = '=';
-    // static final char WALL = '|';
-    // static final char CORNER = ':';              // LISTO!
-    static final char SNAKE_HEAD = 'O';     // Refactorizar en clase Slot que reciba un char y diga si 
-    // static final char SNAKE_BODY = 'o';     //es comida, cuerpo o vacío, o que tenga métodos para comprobar
-    // static final char FOOD = 'à';           //si un slot es alguno de esos (mejor la segunda opción)
-    // static final char SPACE = '-';
-
     
     static char[][] board;
     static ArrayList<int[]> snakeCoords = new ArrayList<>(
@@ -48,12 +39,12 @@ public class SnakeGame {
         while (true) {
             updateBoard();
 
-            if ( Slot.VOID.isThis(front) ) {  //en plan    Slot.isSpace(front)
+            if ( Slot.VOID.isThis(front) ) {
                 walk(false);
             } else if ( Slot.APPLE.isThis(front) ) {
                 walk(true);
             } else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {
-                Interface.printGameOver();
+                Restile.printGameOver();
                 break;
             }
 
@@ -66,8 +57,8 @@ public class SnakeGame {
         cleanTerminal();
         updateStates();
         displaySnake();         
-        displayHead(); // <-- Eso debería ser cosa de la interfaz. Sería mejor procesar 
-        Interface.displayBoard(board);// el board como un char[][] con solo números y espacios o algo así
+        displayHead(); // <-- Eso debería ser cosa del restile (no la interfaz ni el board). Sería mejor procesar 
+        Restile.displayBoard(board);// el board como un char[][] con solo números y espacios o algo así
     }
 
 
@@ -131,7 +122,7 @@ public class SnakeGame {
 
 
     static void cleanTerminal () {
-        System.out.print("\033[H\033[2J");
+        System.out.print("\033[H\033[2J");  //esto debería ser de la interafaz
         System.out.flush();
     }
 
@@ -140,7 +131,7 @@ public class SnakeGame {
         char[][] newBoard = new char[y][x];
 
         for (int row = 0; row < y; row++) {
-            for (int slot = 0; slot < x; slot++) {      // Quizas en cada iteración debería llamarse a 
+            for (int slot = 0; slot < x; slot++) {              // Quizas en cada iteración debería llamarse a 
                 newBoard[row][slot] = Slot.VOID.getRepr();            //esta función para tener un tablero limpio cada vez 
             }
         }
@@ -158,14 +149,15 @@ public class SnakeGame {
 
 
     static void displaySnake () {
-        for (int[] coord : snakeCoords){              //Esto debería quitarlo para ahorrar rendimiento
-            setBoardSlot(coord, Slot.SNAKE.getRepr());
+        for (int[] coord : snakeCoords){              //esto debería recibir el tablero y devolver uno nuevo con la serpiente dentro
+            setBoardSlot(coord, Slot.SNAKE.getRepr());//y debería estar dentro de una clase serpiente
         }
     }
 
 
+    static final char SNAKE_HEAD = 'O';     
     static void displayHead () {
-        int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la interfaz
+        int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la clase estilo
         setBoardSlot(headCoord, SNAKE_HEAD);
         setBoardSlot(neckCoord, Slot.SNAKE.getRepr());
     }

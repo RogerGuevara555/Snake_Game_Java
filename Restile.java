@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Interface {
+public class Restile {
     
     static final char CEIL_ICON = '=';
     static final char WALL = '|';
