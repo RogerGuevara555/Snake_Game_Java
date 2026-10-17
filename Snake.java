@@ -8,17 +8,8 @@ public class Snake {
     boolean alive=true;
 
 
-    public Snake () {
-        List<int[]> newSnakeCoords = new ArrayList<int[]>();
-        newSnakeCoords.add(new int[]{ 0,0});
-        newSnakeCoords.add(new int[]{-1,0});
-        newSnakeCoords.add(new int[]{-2,0});
-        newSnakeCoords.add(new int[]{-3,0});
 
-        this.snakeCoords = newSnakeCoords;
-        this.direction = new int[]{-1,0};
-    }
-    public Snake (int[][] board) {
+    public Snake (char[][] board) {
         List<int[]> newSnakeCoords = new ArrayList<int[]>();
         newSnakeCoords.add(new int[]{ 0,0});
         newSnakeCoords.add(new int[]{-1,0});
@@ -27,10 +18,9 @@ public class Snake {
 
         this.snakeCoords = newSnakeCoords;
         this.snakeCoords = centerSnakeCoord(board);
-        this.direction = new int[]{-1,0};
+        this.direction = new int[]{1,0};
     }
-    
-    List<int[]> centerSnakeCoord (int[][] board) {
+    List<int[]> centerSnakeCoord (char[][] board) {
         List<int[]> newSnakeCoords = snakeCoords;
         for (int[] coord : newSnakeCoords){
             coord[0] += board[0].length/2;          // ya veré donde pongo mejor esto
@@ -38,6 +28,7 @@ public class Snake {
         }
         return newSnakeCoords;
     }
+
 
 
     public void walk (boolean grow) {
@@ -49,7 +40,8 @@ public class Snake {
         }
     }
 
-    int[] getFrontCoord () {
+    
+    public int[] getFrontCoord () {
         int[] headCoord = snakeCoords.get(0);
         int[] frontCoord = new int[] {
             headCoord[0] + direction[0], 
