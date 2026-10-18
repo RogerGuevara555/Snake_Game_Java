@@ -2,21 +2,22 @@ public class SnakeGame {    // dejar esta clase como main
     
     public static void main(String[] args) { 
 
-        board = makeBoard(20, 10);
-        Snake snake = new Snake(board);        
         gameLoop(snake);
         System.out.println();
     }
-
-    
-    static char[][] board;      // Refactorizar en una clase board
     
     
-    static void gameLoop (Snake snake) {
+    static Board board = new Board(20, 10);
+    static Snake snake = new Snake(board.board);        
+    //static char[][] board;      // Refactorizar en una clase board
+    
+    
+    static void gameLoop () {
         while (snake.isAlive()) {
-            updateBoard(snake);
-            char front = getBoardSlot(snake.getFrontCoord());
-
+            updateBoard();
+            
+            int[] frontCoord = snake.getFrontCoord();
+            char front = board.getBoardSlot(frontCoord);
             if      ( Slot.VOID.isThis (front) ) {snake.walk(false);}
             else if ( Slot.APPLE.isThis(front) ) {snake.walk( true);} 
             else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {snake.die();}
@@ -27,19 +28,29 @@ public class SnakeGame {    // dejar esta clase como main
     }
     
 
-    static void updateBoard (Snake snake) {
+    static void updateBoard () {
         Interface.cleanTerminal();
-        board = makeBoard(20, 10);          // <-- Eso debería ser cosa del Restile (no la interfaz ni el board). Sería mejor procesar 
-        displaySnake(snake);                    // el board como un char[][] con solo números y espacios o algo así
 
-        String[][] decoratedBoard = Restile.decorateBoard(board, snake);
+        board = makeBoard(20, 10);      //board.reset();
+        displaySnake(snake);   // que sea board.putSnakeInBoard(snake);
+        
+        String[][] decoratedBoard = Restile.decorateBoard(board.board, snake);
         String printableBoard = Restile.makeStringBoard(decoratedBoard);
-
+        
         System.out.println(printableBoard);
+    }
+
+
+    static void waitCoolDown () {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     
     
-    static void setBoardSlot (int[] coord, char icon) {
+    /*static void setBoardSlot (int[] coord, char icon) {
         int coord_X = coord[0]; 
         int coord_Y = coord[1];
         board[coord_Y][coord_X] = icon;
@@ -54,19 +65,10 @@ public class SnakeGame {    // dejar esta clase como main
             return board[coord_Y][coord_X];
         else
             return Slot.WALL.getRepr();
-    }
+    } */
 
 
-    static void waitCoolDown () {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-
-    public static char[][] makeBoard (int x, int y) {
+    /*public static char[][] makeBoard (int x, int y) {
         char[][] newBoard = new char[y][x];
 
         for (int row = 0; row < y; row++) {                      //    LISTO!!
@@ -75,14 +77,14 @@ public class SnakeGame {    // dejar esta clase como main
             }
         }
         return newBoard;
-    }
+    } */
 
 
-    static void displaySnake (Snake snake) {                 //      Que se llame makeBoardWithSnake() y que siga siendo static
+    /*static void displaySnake (Snake snake) {                 //      Que se llame putSnakeInBoard() y que siga siendo static
         for (int[] coord : snake.getCoords()){              //Esto debería recibir un board y un snake, y retornar un board con snake
             setBoardSlot(coord, Slot.SNAKE.getRepr());     //    ( Board + Snake = BoardWithSnake )
         }
-    }
+    } */
 }
 
 
