@@ -10,37 +10,9 @@ public class Restile {
     static final String SNAKE_BODY = "o";
     static final String FOOD = "à";
     static final String SPACE = "-";
-
-
-    public static void displayBoard (char[][] board, Snake snake) {
-        int[] headCoord = snake.getCoords().getFirst();
-        String[][] sBoard = changeMatrixType(board);
-        String[][] shBoard = displayHead(sBoard, headCoord);
-        String pBoard = makePrintableBoard(shBoard);
-        System.out.println(pBoard);
-    }
-
     
     
-    static String[][] displayHead (String[][] board, int[] headCoord) {
-        String[][] newBoard = board;
-        newBoard[headCoord[1]][headCoord[0]] = SNAKE_HEAD;
-        return newBoard;
-    }
-    
-
-    static String[][] changeMatrixType (char[][] board) {
-        String[][] newStringBoard = new String[board.length][board[0].length];
-        for (int i=0; i<board.length; i++) {
-            for (int j=0; j<board[0].length; j++) {
-                newStringBoard[i][j] = String.valueOf(board[i][j]);
-            }
-        }
-        return newStringBoard;
-    }
-    
-    
-    static String makePrintableBoard (String[][] board) {
+    public static String makeStringBoard (String[][] board) {
         String printableBoard = "";
         List<String> prePrintableBoard = new ArrayList<>();
     
@@ -56,4 +28,31 @@ public class Restile {
     
         return "\n" + printableBoard;
     }
+
+    
+    public static String[][] decorateBoard (char[][] board, Snake snake) {
+        int[] headCoord = snake.getCoords().getFirst();
+        String[][] boardStrings = changeMatrixType(board);
+        String[][] boardStWithHead = displayHeadInBoard(boardStrings, headCoord);
+        return boardStWithHead;
+    }    
+
+    static String[][] changeMatrixType (char[][] board) {
+        String[][] newStringBoard = new String[board.length][board[0].length];
+        for (int i=0; i<board.length; i++) {
+            for (int j=0; j<board[0].length; j++) {
+                newStringBoard[i][j] = String.valueOf(board[i][j]);
+            }    
+        }    
+        return newStringBoard;
+    }    
+    
+    static String[][] displayHeadInBoard (String[][] board, int[] headCoord) {
+        String[][] newBoard = board;
+        newBoard[headCoord[1]][headCoord[0]] = SNAKE_HEAD;
+        return newBoard;
+    }    
+    
+
+
 }

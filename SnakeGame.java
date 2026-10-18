@@ -1,10 +1,8 @@
-import java.util.List;
-
 public class SnakeGame {    // dejar esta clase como main
     
     public static void main(String[] args) { 
 
-        board = makeBoard(50, 20);
+        board = makeBoard(20, 10);
         Snake snake = new Snake(board);        
         gameLoop(snake);
         System.out.println();
@@ -15,30 +13,29 @@ public class SnakeGame {    // dejar esta clase como main
     
     
     static void gameLoop (Snake snake) {
-        while (true) {
+        while (snake.isAlive()) {
             updateBoard(snake);
             char front = getBoardSlot(snake.getFrontCoord());
 
-            if ( Slot.VOID.isThis(front) ) {
-                snake.walk(false);
-            } else if ( Slot.APPLE.isThis(front) ) {
-                snake.walk(true);
-            } else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {
-                Interface.printGameOver();
-                break;
-            }
-
+            if      ( Slot.VOID.isThis (front) ) {snake.walk(false);}
+            else if ( Slot.APPLE.isThis(front) ) {snake.walk( true);} 
+            else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {snake.die();}
+            
             waitCoolDown();
         }
+        Interface.printGameOver();
     }
     
 
     static void updateBoard (Snake snake) {
         Interface.cleanTerminal();
-        board = makeBoard(50, 20);
-        displaySnake(snake);         
-        displayHead(snake);                      // <-- Eso debería ser cosa del Restile (no la interfaz ni el board). Sería mejor procesar 
-        Restile.displayBoard(board, snake);            // el board como un char[][] con solo números y espacios o algo así
+        board = makeBoard(20, 10);          // <-- Eso debería ser cosa del Restile (no la interfaz ni el board). Sería mejor procesar 
+        displaySnake(snake);                    // el board como un char[][] con solo números y espacios o algo así
+
+        String[][] decoratedBoard = Restile.decorateBoard(board, snake);
+        String printableBoard = Restile.makeStringBoard(decoratedBoard);
+
+        System.out.println(printableBoard);
     }
     
     
@@ -86,16 +83,6 @@ public class SnakeGame {    // dejar esta clase como main
             setBoardSlot(coord, Slot.SNAKE.getRepr());     //    ( Board + Snake = BoardWithSnake )
         }
     }
-
-
-    static final char SNAKE_HEAD = 'O';     
-    static void displayHead (Snake snake) {
-        List<int[]> snakeCoords = snake.getCoords();
-        int[] headCoord = snakeCoords.getFirst();      
-        int[] neckCoord = snakeCoords.get(1);   // Probablemente meta esto en la clase estilo
-        setBoardSlot(headCoord, SNAKE_HEAD);
-        setBoardSlot(neckCoord, Slot.SNAKE.getRepr());
-    }
 }
 
 
@@ -124,7 +111,7 @@ enum Slot {
 class Interface {
     
     static void cleanTerminal () {
-        System.out.print("\033[H\033[2J");  //esto debería ser de la interafaz
+        System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 

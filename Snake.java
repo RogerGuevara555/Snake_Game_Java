@@ -7,8 +7,6 @@ public class Snake {
     int[] direction;
     boolean alive=true;
 
-
-
     public Snake (char[][] board) {
         List<int[]> newSnakeCoords = new ArrayList<int[]>();
         newSnakeCoords.add(new int[]{ 0,0});
@@ -28,7 +26,6 @@ public class Snake {
         }
         return newSnakeCoords;
     }
-
 
 
     public void walk (boolean grow) {
@@ -51,7 +48,7 @@ public class Snake {
     }
 
 
-    public void    dead    () {alive = false;}
-    public boolean isAlive () {return alive;}
+    public void        die       () {alive = false;}
+    public boolean     isAlive   () {return alive;}
     public List<int[]> getCoords () {return snakeCoords;}
 }
