@@ -52,7 +52,4 @@ public class Restile {
         newBoard[headCoord[1]][headCoord[0]] = SNAKE_HEAD;
         return newBoard;
     }    
-    
-
-
 }

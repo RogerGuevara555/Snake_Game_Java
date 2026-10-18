@@ -23,9 +23,9 @@ public class Board {
     }
 
 
-    public void displaySnake (Snake snake) {                 //      Que se llame putSnakeInBoard() y que siga siendo static
-        for (int[] coord : snake.getCoords()){              //Esto debería recibir un board y un snake, y retornar un board con snake
-            setBoardSlot(coord, Slot.SNAKE.getRepr());     //    ( Board + Snake = BoardWithSnake )
+    public void putSnakeInBoard (Snake snake) {     //( Board <- Snake )
+        for (int[] coord : snake.getCoords()){
+            setBoardSlot(coord, Slot.SNAKE.getRepr());
         }
     }
 
@@ -45,4 +45,8 @@ public class Board {
         else
             return Slot.WALL.getRepr();
     }
+
+
+    public char[][] getBoard () {return board;} 
+    public void reset () {this.board = makeBoard(X, Y);}
 }
