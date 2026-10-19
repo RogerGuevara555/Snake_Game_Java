@@ -1,14 +1,20 @@
-public class Main {    // dejar esta clase como main
+/* 
+import org.jline.reader.*;
+import org.jline.reader.impl.*;
+import org.jline.terminal.*;
+import org.jline.terminal.impl.*;
+*/
+
+public class Main {
     
     public static void main(String[] args) { 
-
         gameLoop();
         System.out.println();
     }
     
     
     static Board board = new Board(20, 10);
-    static Snake snake = new Snake(board.board);        
+    static Snake snake = new Snake(board);        
     
     
     static void gameLoop () {
@@ -33,7 +39,7 @@ public class Main {    // dejar esta clase como main
         board.reset();
         board.putSnakeInBoard(snake);
         
-        String[][] decoratedBoard = Restile.decorateBoard(board.board, snake);
+        String[][] decoratedBoard = Restile.decorateBoard(board.getBoard(), snake);
         String printableBoard = Restile.makeStringBoard(decoratedBoard);
         
         Interface.printFrame(printableBoard);
@@ -75,4 +81,20 @@ class Interface {
                 """;;
         System.out.println(gameOver);
     }
+
+    /*
+    public static void inputRaw () {
+        Terminal terminal = TerminalBuilder.builder()
+        .jna(true)
+        .system(true)
+        .build();
+        try {
+            terminal.enterRawMode();
+            Reader reader = terminal.reader();
+            int charCode = reader.read(); // Leer carácter en tiempo real
+        } finally {
+            terminal.close();
+        }
+    }
+    */
 }

@@ -1,6 +1,6 @@
 public class Board {
     
-    char[][] board;
+    private char[][] board;
     final int X;
     final int Y;
 

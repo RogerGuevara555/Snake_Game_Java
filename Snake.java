@@ -3,26 +3,26 @@ import java.util.List;
 
 public class Snake {
     
-    List<int[]> snakeCoords;
-    int[] direction;
-    boolean alive=true;
+    private List<int[]> snakeCoords;
+    private int[] direction;
+    private boolean alive=true;
 
-    public Snake (char[][] board) {
+    public Snake (Board board) {
         List<int[]> newSnakeCoords = new ArrayList<int[]>();
-        newSnakeCoords.add(new int[]{ 0,0});
-        newSnakeCoords.add(new int[]{-1,0});
-        newSnakeCoords.add(new int[]{-2,0});
-        newSnakeCoords.add(new int[]{-3,0});
+            newSnakeCoords.add(new int[]{ 0,0});
+            newSnakeCoords.add(new int[]{-1,0});
+            newSnakeCoords.add(new int[]{-2,0});
+            newSnakeCoords.add(new int[]{-3,0});
 
         this.snakeCoords = newSnakeCoords;
         this.snakeCoords = centerSnakeCoord(board);
         this.direction = new int[]{1,0};
     }
-    List<int[]> centerSnakeCoord (char[][] board) {
+    List<int[]> centerSnakeCoord (Board board) {
         List<int[]> newSnakeCoords = snakeCoords;
         for (int[] coord : newSnakeCoords){
-            coord[0] += board[0].length/2;          // ya veré donde pongo mejor esto
-            coord[1] += board.length/2;
+            coord[0] += board.X/2;          // ya veré donde pongo mejor esto
+            coord[1] += board.Y/2;
         }
         return newSnakeCoords;
     }
