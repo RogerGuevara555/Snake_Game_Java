@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Snake {
     
+
     private List<int[]> snakeCoords;
     private int[] direction;
     private boolean alive=true;
 
+    
     public Snake (Board board) {
         List<int[]> newSnakeCoords = new ArrayList<int[]>();
             newSnakeCoords.add(new int[]{ 0,0});
@@ -51,4 +54,15 @@ public class Snake {
     public void        die       () {alive = false;}
     public boolean     isAlive   () {return alive;}
     public List<int[]> getCoords () {return snakeCoords;}
+    
+    public void setDirection (int directionNumber) {
+        switch (directionNumber) {
+            case 0: direction = new int[] { 1,0}; break; //right 
+            case 1: direction = new int[] {-1,0}; break; //left
+            case 2: direction = new int[] {0, 1}; break; //down
+            case 3: direction = new int[] {0,-1}; break; //up
+        
+            default: break;
+        }
+    } 
 }
