@@ -1,8 +1,8 @@
 enum Slot {
-    VOID('-'),
+    VOID ('-'),
     SNAKE('o'),
     APPLE('2'),
-    WALL('3');
+    WALL ('3');
     
     private final char repr;
 
@@ -14,7 +14,7 @@ enum Slot {
         return this.repr;
     }
     
-    public boolean isThis (char icon) {
+    public boolean equals (char icon) {
         return icon == getRepr();
     }
 }

@@ -23,9 +23,9 @@ public class Main {
             
             int[] frontCoord = snake.getFrontCoord();
             char front = board.getBoardSlot(frontCoord);
-            if      ( Slot.VOID.isThis (front) ) {snake.walk(false);}
-            else if ( Slot.APPLE.isThis(front) ) {snake.walk( true);} 
-            else if ( Slot.SNAKE.isThis(front) || Slot.WALL.isThis(front) ) {snake.die();}
+            if      ( Slot.VOID.equals (front) ) {snake.walk(false);}
+            else if ( Slot.APPLE.equals(front) ) {snake.walk( true);} 
+            else if ( Slot.SNAKE.equals(front) || Slot.WALL.equals(front) ) {snake.die();}
             
             waitCoolDown();
         }

@@ -16,7 +16,7 @@ public class Restile {
         String printableBoard = "";
         List<String> prePrintableBoard = new ArrayList<>();
     
-        String ceil = CORNER + CEIL_ICON.repeat(board[0].length) + CEIL_ICON + "\n";
+        String ceil = CORNER + CEIL_ICON.repeat(board[0].length) + CORNER + "\n";
         
         for (String[] row : board) {
             String rowString = String.join("", row);

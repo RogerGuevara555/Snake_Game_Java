@@ -1,9 +1,11 @@
 public class Board {
     
+
     private char[][] board;
     final int X;
     final int Y;
 
+    
     public Board (int x, int y) {
         this.X = x;
         this.Y = y;
